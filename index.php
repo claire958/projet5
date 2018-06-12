@@ -1,15 +1,16 @@
 <?php
+require_once('vendor/autoload.php');
+require_once ('controller/frontend/frontend.php');
 
-require_once("vendor/autoload.php");
+ if (isset($_GET['page']) && $_GET['page'] == "blog") {
+     $frontend = new Frontend();
+     $render = $frontend->blog();
 
-
-$loader = new \Twig_Loader_Filesystem(__DIR__.'/templates');
-$twig = new \Twig_Environment($loader); array('cache' => false);
-
-if (isset($_GET['page']) && $_GET['page'] == "blog") {
-  $template = 'blog.twig';
-} else {
-  $template = 'index.twig';
+ }elseif (isset($_GET['page']) && $_GET['page'] == "home") {
+     $frontend = new Frontend();
+     $render = $frontend->index();
+ }else {
+    $frontend = new Frontend();
+    $render = $frontend->login_register();
 }
-
-echo $twig->render($template);
+echo $render;

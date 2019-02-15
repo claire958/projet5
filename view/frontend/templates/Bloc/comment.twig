@@ -1,0 +1,15 @@
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-md-10 mx-auto">
+                <div class="comments">
+                    <h4>Comments</h4>
+                    {% for comment in comment %}
+                    <p class="page-content">
+                        {{ users[comment.idUser].pseudo }} - {{ comment.dateComment }}<br/>
+                        {{ comment.comment }}
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>

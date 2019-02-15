@@ -1,0 +1,22 @@
+{# Affichage d'un article #}
+{% for article in article %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 col-md-10 mx-auto">
+                        <div class="post-view">
+                                <h2 class="page-title">
+                                    {{ article.title }}
+                                </h2>
+                                <h3 class="page-subtitle">
+                                    {{ article.introduction }}
+                                </h3>
+                                <p class="page-content">
+                                    {{ article.content }}
+                                </p>
+                                <p class="post-meta">Posted by <a href="#">{{ users[article.idUser].pseudo }}</a> on {{ article.dateUpdate }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endfor %}
+

@@ -1,0 +1,23 @@
+{# Affichage de la liste des articles dans la page BLOG #}
+{% for article in post %}
+    <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+              <div class="post-preview">
+                <a href="index.php?page=article&amp;action=article&amp;id={{ article.idPost }}">
+                  <h2 class="post-title">
+                    {{ article.title }}
+                  </h2>
+                  <h3 class="post-subtitle">
+                      {{ article.introduction }}
+                  </h3>
+                </a>
+                <p class="post-meta">Posted by
+                  <a href="#">{{ users[article.idUser].pseudo }}</a>
+                  on {{ article.dateUpdate }}</p>
+              </div>
+              <hr>
+             </div>
+          </div>
+    </div>
+{% endfor %}

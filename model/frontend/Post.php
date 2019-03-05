@@ -8,8 +8,10 @@
 
 namespace OpenClassrooms\Blog\Model;
 
+require_once("model/frontend/Entites.php");
 
-class Post
+
+class Post extends Entites
 {
     private $idPost;
     private $title;
@@ -17,27 +19,6 @@ class Post
     private $dateUpdate;
     private $introduction;
     private $idUser;
-
-    public function __construct(array $donneesPost)
-    {
-        $this->hydrate($donneesPost);
-    }
-
-    public function hydrate(array $donneesPost)
-    {
-        foreach ($donneesPost as $key => $value)
-        {
-            // On récupère le nom du setter correspondant à l'attribut.
-            $method = 'set'.str_replace('_', '', ucwords($key, '_'));
-
-            // Si le setter correspondant existe.
-            if (method_exists($this, $method))
-            {
-                // On appelle le setter.
-                $this->$method($value);
-            }
-        }
-    }
 
     /**
      * @return mixed

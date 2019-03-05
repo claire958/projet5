@@ -1,8 +1,26 @@
-    <div class="container">
+
+<div class="container" style="margin-top: 40px;">
         <div class="row">
             <div class="col-lg-9 col-md-10 mx-auto">
                 <div class="comments">
-                    <h4>Comments</h4>
+                    <h4>YOUR COMMENTS</h4>
+                    <div class="heading-line"></div>
+
+                    <form action="index.php?page=add_comment&amp;id={{ article.idPost }}" method="post">
+                        <div>
+                            <label for="comment">New comment :</label><br/>
+                            <textarea id="comment" name="comment" maxlength="200" class="form-control" rows="4" placeholder="Enter the text" style="margin-bottom: 10px" required></textarea>
+                        </div>
+                        <div>
+                            <input class="btn btn-primary" type="submit" value="Insert"/>
+                        </div>
+                    </form>
+
+
+                    {% if message == true %}
+                        <i class="fa fa-exclamation-triangle" style="font-size:15px;color:firebrick;padding-bottom: 13px"> {{ message }}</i>
+                    {% endif %}
+
                     {% for comment in comment %}
                     <p class="page-content">
                         {{ users[comment.idUser].pseudo }} - {{ comment.dateComment }}<br/>
@@ -12,4 +30,5 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
+

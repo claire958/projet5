@@ -1,4 +1,5 @@
 <?php
+session_start();
 /**
  * Les fichiers suivant sont inclus dans index.php :
  */
@@ -39,14 +40,33 @@ require_once ('config.php');
 * On instancie la classe Frontend()
 * Et, on appelle la fonction login_register().
 */
- }elseif (isset($_GET['page']) && $_GET['page'] == "login_register") {
+ }elseif (isset($_GET['page']) && $_GET['page'] == "register") {
      $frontend = new Frontend();
-     $render = $frontend->login_register();
+     $render = $frontend->register();
+
+ }elseif (isset($_GET['page']) && $_GET['page'] == "login") {
+     $frontend = new Frontend();
+     $render = $frontend->login();
+
+ }elseif (isset($_GET['page']) && $_GET['page'] == "add_user") {
+     $frontend = new Frontend();
+     $render = $frontend->add_user(htmlspecialchars($_POST['pseudo']), htmlspecialchars($_POST['email']), htmlspecialchars($_POST['password']), htmlspecialchars($_POST['confirm-password']));
+
+ }elseif (isset($_GET['page']) && $_GET['page'] == "connect_user") {
+     $frontend = new Frontend();
+     $render = $frontend->connect_user(htmlspecialchars($_POST['pseudo']), htmlspecialchars($_POST['password']));
+
+ }elseif (isset($_GET['page']) && $_GET['page'] == "add_comment") {
+     $frontend = new Frontend();
+     $render = $frontend->add_comment(htmlspecialchars($_POST['comment']), $_GET['id']);
+
+ }elseif (isset($_GET['page']) && $_GET['page'] == "sign_out") {
+     $frontend = new Frontend();
+     $frontend->sign_out();
 
  }elseif (isset($_GET['page']) && $_GET['page'] == "dashboard") {
      $frontend = new Frontend();
-     $render = $frontend->add_user($_POST['pseudo'], $_POST['email'], $_POST['password'], $_POST['confirm-password']);
-
+     $render = $frontend->dashboard();
 
  }else {
     $frontend = new Frontend();

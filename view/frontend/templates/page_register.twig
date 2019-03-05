@@ -14,10 +14,10 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-6">
-                                <a href="#" class="active" id="login-form-link">Login</a>
+                                <a href="index.php?page=login"  id="login-form-link-2">Login</a>
                             </div>
                             <div class="col-xs-6">
-                                <a href="#" id="register-form-link">Register</a>
+                                <a href="index.php?page=register" class="active" id="register-form-link-2">Register</a>
                             </div>
                         </div>
                         <hr>
@@ -25,8 +25,8 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                {{ include ('bloc/login.twig') }}
-                                {{ include ('bloc/register.twig') }}
+                                {{ include ('bloc/register_log.twig') }}
+                                {{ include ('bloc/login_reg.twig') }}
                             </div>
                         </div>
                     </div>

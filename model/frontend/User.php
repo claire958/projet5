@@ -8,8 +8,9 @@
 
 namespace OpenClassrooms\Blog\Model;
 
+require_once("model/frontend/Entites.php");
 
-class User
+class User extends Entites
 {
     private $idUser;
     private $pseudo;
@@ -17,27 +18,6 @@ class User
     private $password;
     private $role;
     private $validation;
-
-    public function __construct(array $donneesUser)
-    {
-        $this->hydrate($donneesUser);
-    }
-
-    public function hydrate(array $donneesUser)
-    {
-        foreach ($donneesUser as $key => $value)
-        {
-            // On récupère le nom du setter correspondant à l'attribut.
-            $method = 'set'.str_replace('_', '', ucwords($key, '_'));
-
-            // Si le setter correspondant existe.
-            if (method_exists($this, $method))
-            {
-                // On appelle le setter.
-                $this->$method($value);
-            }
-        }
-    }
 
     /**
      * @return mixed

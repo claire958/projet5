@@ -8,8 +8,10 @@
 
 namespace OpenClassrooms\Blog\Model;
 
+require_once("model/frontend/Entites.php");
 
-class Comment
+
+class Comment extends Entites
 {
     private $idComment;
     private $comment;
@@ -17,27 +19,6 @@ class Comment
     private $dateComment;
     private $validation;
     private $idUser;
-
-    public function __construct(array $donneesComment)
-    {
-        $this->hydrate($donneesComment);
-    }
-
-    public function hydrate(array $donneesComment)
-    {
-        foreach ($donneesComment as $key => $value)
-        {
-            // On récupère le nom du setter correspondant à l'attribut.
-            $method = 'set'.str_replace('_', '', ucwords($key, '_'));
-
-            // Si le setter correspondant existe.
-            if (method_exists($this, $method))
-            {
-                // On appelle le setter.
-                $this->$method($value);
-            }
-        }
-    }
 
     /**
      * @return mixed

@@ -1,6 +1,4 @@
-{# Affichage du formulaire d'enregistrement de la page ACCOUNT #}
-
-<form id="register-form" action="index.php?page=add_user" method="post" role="form" style="display: none;">
+<form id="register-form-2" action="index.php?page=add_user" method="post" role="form" style="display: block;">
     <div class="form-group">
         <input type="text" name="pseudo" id="pseudo" tabindex="1" class="form-control" placeholder="Username" value="" maxlength="20" autofocus required>
     </div>
@@ -14,9 +12,9 @@
         <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" maxlength="25" required>
     </div>
     <div class="messsage-erreur" id="message-erreur">
-       {% if message == true %}
+        {% if message == true %}
             <i class="fa fa-exclamation-triangle" style="font-size:15px;color:firebrick;padding-bottom: 13px"> {{ message }}</i>
-       {% endif %}
+        {% endif %}
     </div>
     <div class="form-group">
         <div class="row">

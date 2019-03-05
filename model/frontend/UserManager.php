@@ -9,6 +9,7 @@
 namespace OpenClassrooms\Blog\Model;
 
 require_once("model/frontend/Manager.php");
+require_once("model/frontend/Entites.php");
 
 use PDO;
 
@@ -31,33 +32,48 @@ class UserManager extends Manager
 
     public function addUser($pseudo, $email, $password)
     {
-        $role = 'user';
-        $validation = 'non';
         $db = $this->dbConnect();
         $addUser = $db->prepare('INSERT INTO user(pseudo, email, password, role, validation) VALUES(?, ?, ?, ?, ?)');
+
+        $role = "user";
+        $validation = "non";
 
         $newUser = $addUser->execute(array($pseudo, $email, $password, $role, $validation));
 
         return $newUser;
-
-
     }
 
     public function getUser($pseudo)
     {
         $db = $this->dbConnect();
-        $getUser = $db->query('SELECT pseudo FROM user WHERE pseudo="' . $pseudo . '"');
+        $getUser = $db->prepare('SELECT * FROM user WHERE pseudo = ?');
 
-        return $getUser->fetch(PDO::FETCH_ASSOC);
+        $getUser->execute(array($pseudo));
+
+        $currentUser = ($getUser->fetch(PDO::FETCH_ASSOC));
+
+        if($currentUser == false){
+            return false;
+        }
+        else{
+            return new User($currentUser);
+        }
     }
 
     public function getUserMail($email)
     {
         $db = $this->dbConnect();
-        $getUserMail = $db->query('SELECT email FROM user WHERE email="' . $email . '"');
+        $getUserMail = $db->prepare('SELECT email FROM user WHERE email = ?');
 
-        $getUserMail->fetch(PDO::FETCH_ASSOC);
+        $getUserMail->execute(array($email));
 
-        return $getUserMail;
+        $currentUser = ($getUserMail->fetch(PDO::FETCH_ASSOC));
+
+        if($currentUser == false){
+            return false;
+        }
+        else{
+            return new User($currentUser);
+        }
     }
 }

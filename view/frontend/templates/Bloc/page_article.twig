@@ -1,5 +1,4 @@
 {# Affichage d'un article #}
-{% for article in article %}
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9 col-md-10 mx-auto">
@@ -7,6 +6,7 @@
                                 <h2 class="page-title">
                                     {{ article.title }}
                                 </h2>
+                                  <div class="heading-line"></div>
                                 <h3 class="page-subtitle">
                                     {{ article.introduction }}
                                 </h3>
@@ -18,5 +18,4 @@
                     </div>
                 </div>
             </div>
-{% endfor %}
 

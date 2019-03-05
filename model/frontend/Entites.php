@@ -9,14 +9,17 @@
 namespace OpenClassrooms\Blog\Model;
 
 
-class Entites
+abstract class Entites
 {
-    public function __construct(array $donnees)
+    public function __construct($donnees)
     {
-        $this->hydrate($donnees);
+        if(is_array($donnees))
+        {
+            $this->hydrate($donnees);
+        }
     }
 
-    public function hydrate(array $donnees)
+    private function hydrate(array $donnees)
     {
         foreach ($donnees as $key => $value)
         {

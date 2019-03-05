@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNavLogin">
     <div class="container">
+        <a class="navbar-brand" href="index.php?page=home" style="color:white">C. MAILLET</a>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
@@ -8,6 +9,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?page=blog" style="color:white">Blog</a>
                 </li>
+                {% if pseudo == true %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white">
+                            {{ pseudo }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="index.php?page=dashboard">My dashboard</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="index.php?page=sign_out">Sign out</a>
+                        </div>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

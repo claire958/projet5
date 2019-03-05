@@ -1,17 +1,18 @@
 {# Affichage du formulaire de connexion de la page ACCOUNT #}
 {% if messageValidation == true %}
-    <i class="fa fa-exclamation-triangle" style="font-size:15px;color:mediumseagreen;padding-bottom: 13px"> {{ message }}</i>
+    <i class="fa fa-check" style="font-size:15px;color:mediumseagreen;padding-bottom: 13px">
+        {{ messageValidation }}
+        {% if pseudo == true %}
+            {{ pseudo }} !
+        {% endif %}
+    </i>
 {% endif %}
-<form id="login-form" action="" method="post" role="form" style="display: block;">
+<form id="login-form" action="index.php?page=connect_user" method="post" role="form" style="display: block;">
     <div class="form-group">
-        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+        <input type="text" name="pseudo" id="pseudo" tabindex="1" class="form-control" placeholder="Username" value="" autofocus required>
     </div>
     <div class="form-group">
-        <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
-    </div>
-    <div class="form-group text-center">
-        <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-        <label for="remember"> Remember Me</label>
+        <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password" required>
     </div>
     <div class="form-group">
         <div class="row">
@@ -20,13 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="text-center">
-                    <a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% if message == true %}
+        <i class="fa fa-exclamation-triangle" style="font-size:15px;color:firebrick;padding-bottom: 13px"> {{ message }}</i>
+    {% endif %}
 </form>

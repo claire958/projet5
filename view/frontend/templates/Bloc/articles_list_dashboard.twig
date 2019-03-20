@@ -1,0 +1,53 @@
+    {% if name == "articles_list_dashboard" %}
+        <div class="col-lg-6 mb-4" xmlns:text-decoration="http://www.w3.org/1999/xhtml">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Liste des articles</h6>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+
+                       {% if message == true %}
+                           <div class="row">
+                               <div class="alert alert-success" role="alert">
+                                   {{ message }}
+                               </div>
+                           </div>
+                       {% endif %}
+
+                    {% for article in post %}
+                            <div class="row">
+                                <div class="col-lg-8 col-md-10 mx-auto">
+
+                                        <a href="index.php?page=dashboard&amp;name=form_update_post&amp;id={{ article.idPost }}">
+                                            <h3>{{ article.title }}</h3>
+                                            <h6>{{ article.introduction }}</h6>
+                                        </a>
+                                        <p style="font-size: 12px">Posted by
+                                            {{ users[article.idUser].pseudo }}
+                                            on {{ article.dateUpdate }}</p>
+
+                                    <a href="index.php?page=dashboard&amp;name=form_update_post&amp;id={{ article.idPost }}"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Modifier</button></a>
+                                    <a href="index.php?page=delete_post&amp;id={{ article.idPost }}"><button type="button" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i> Supprimer</button></a>
+
+                                    <hr>
+
+                                </div>
+                            </div>
+                    {% endfor %}
+
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </nav>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}

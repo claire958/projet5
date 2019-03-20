@@ -15,7 +15,9 @@
     </div>
     <div class="messsage-erreur" id="message-erreur">
        {% if message == true %}
-            <i class="fa fa-exclamation-triangle" style="font-size:15px;color:firebrick;padding-bottom: 13px"> {{ message }}</i>
+           <div class="alert alert-danger" role="alert">
+               <i class="fa fa-exclamation-triangle" style="font-size:15px;color:firebrick;padding-bottom: 13px"> {{ message }}</i>
+           </div>
        {% endif %}
     </div>
     <div class="form-group">

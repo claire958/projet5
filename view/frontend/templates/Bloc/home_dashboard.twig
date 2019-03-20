@@ -1,0 +1,21 @@
+{% if name == "dashboard" %}
+<div class="col-lg-6 mb-4">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Tableau de bord</h6>
+        </div>
+        <div class="card-body">
+            <div class="text-center">
+                <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="public/img/undraw_posting_photo.svg" alt="">
+            </div>
+            <p><h5>Bienvenue {{ pseudo }} !</h5></p>
+            <p>Ce tableau de bord va vous permettre de mettre à jour le blog et de gérer vos utilisateurs.</p>
+            <p>Voici quelques liens pour vous aider à démarrer :</p>
+            <p>&rarr; <a href="index.php?page=dashboard&id=articles_list_dashboard">Gestion des articles</a></p>
+            <p>&rarr; <a href="index.php?page=dashboard&id=comments_list_dashboard">Gestion des commentaires</a></p>
+            <p>&rarr; <a href="index.php?page=dashboard&id=list_users">Gestion des utilisateurs</a></p>
+            <p>Lancez-vous ! <i class="far fa-smile-wink"></i></p>
+        </div>
+    </div>
+</div>
+{% endif %}

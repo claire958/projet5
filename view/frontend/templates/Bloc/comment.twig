@@ -16,9 +16,13 @@
                         </div>
                     </form>
 
-
                     {% if message == true %}
-                        <i class="fa fa-exclamation-triangle" style="font-size:15px;color:firebrick;padding-bottom: 13px"> {{ message }}</i>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Oups !</strong> {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     {% endif %}
 
                     {% for comment in comment %}

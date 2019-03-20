@@ -1,43 +1,96 @@
-<body>
-<aside class="sidebar">
-    <div id="leftside-navigation" class="nano">
-        <ul class="nano-content">
-            <li>
-                <a href="index.php?page=dashboard"><i class="fa fa-dashboard"></i><span>Dashboard {{ pseudo }}</span></a>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-file"></i><span>Articles</span><i class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                    <li><a href="#">Voir les articles</a>
-                    </li>
-                    <li><a href="#">Ajouter un article</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-comments"></i><span>Commentaires</span><i class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
-                    <li><a href="#">Gestion des commentaires</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-user"></i><span>Utilisateurs</span><i class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
-                    <li><a href="#">Gestion des utilisateurs</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-cogs"></i><span>Paramètres</span><i class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
-                    <li><a href="index.php?page=home">Retour au blog</a>
-                    </li>
-                    <li><a href="index.php?page=sign_out">Se déconnecter</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</aside>
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-toolbox"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">C. MAILLET</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="index.php?page=dashboard">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Tableau de bord</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Interface
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                <i class="far fa-file-alt"></i>
+                <span>Articles</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Gestion des articles</h6>
+                    <a class="collapse-item" href="index.php?page=dashboard&name=articles_list_dashboard">Liste des articles</a>
+                    <a class="collapse-item" href="index.php?page=dashboard&name=add_article">Ajouter un article</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComment" aria-expanded="true" aria-controls="collapseComment">
+                <i class="fas fa-comment"></i>
+                <span>Commentaires</span>
+            </a>
+            <div id="collapseComment" class="collapse" aria-labelledby="headingComment" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Gestion des commentaires</h6>
+                    <a class="collapse-item" href="index.php?page=dashboard&name=comments_list_dashboard">Liste des commentaires</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Paramètres
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                <i class="fas fa-user"></i>
+                <span>Utilisateurs</span>
+            </a>
+            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Gestion des utilisateurs</h6>
+                    <a class="collapse-item" href="index.php?page=dashboard&name=list_users">Liste des utilisateurs</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="index.php?page=sign_out">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Se déconnecter</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->

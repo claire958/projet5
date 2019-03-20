@@ -3,8 +3,18 @@
 <head>
     {{ include('bloc/header_dashboard.twig') }}
 </head>
-<body>
+<body id="page-top">
+<div id="wrapper">
     {{ include('bloc/menu_dashboard.twig') }}
+    {{ include('bloc/home_dashboard.twig') }}
+    {{ include('bloc/articles_list_dashboard.twig') }}
+    {{ include('bloc/add_article.twig') }}
+    {{ include('bloc/comments_list_dashboard.twig') }}
+    {{ include('bloc/list_users.twig') }}
+    {{ include('bloc/form_update_post.twig') }}
+    {{ include('bloc/form_update_comment.twig') }}
+</div>
 </body>
     {{ include('bloc/footer_dashboard.twig') }}
+
 </html>

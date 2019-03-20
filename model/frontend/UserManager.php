@@ -15,6 +15,7 @@ use PDO;
 
 class UserManager extends Manager
 {
+    //Récupère la liste des utilisateurs - classement par id
     public function getListUser()
     {
         $users = [];
@@ -30,19 +31,18 @@ class UserManager extends Manager
         return $users;
     }
 
-    public function addUser($pseudo, $email, $password)
+    //Ajoute un utilisateur à la bdd
+    public function addUser(User $user)
     {
         $db = $this->dbConnect();
         $addUser = $db->prepare('INSERT INTO user(pseudo, email, password, role, validation) VALUES(?, ?, ?, ?, ?)');
 
-        $role = "user";
-        $validation = "non";
-
-        $newUser = $addUser->execute(array($pseudo, $email, $password, $role, $validation));
+        $newUser = $addUser->execute(array($user->getPseudo(), $user->getEmail(), $user->getPassword(), $user->getRole(), $user->getValidation()));
 
         return $newUser;
     }
 
+    //Récupère les données d'un utilisateur - tri par pseudo
     public function getUser($pseudo)
     {
         $db = $this->dbConnect();
@@ -60,6 +60,7 @@ class UserManager extends Manager
         }
     }
 
+    //Récupère les données d'un utilisateur - tri par email
     public function getUserMail($email)
     {
         $db = $this->dbConnect();
@@ -75,5 +76,27 @@ class UserManager extends Manager
         else{
             return new User($currentUser);
         }
+    }
+
+    //Mettre à jour l'état de validation d'un utilisateur - non->oui
+    public function validationUser(User $user)
+    {
+        $db = $this->dbConnect();
+        $req = $db->prepare('UPDATE user SET validation = ? WHERE id_user = ?');
+
+        $validationUser = $req->execute(array($user->getValidation(), $user->getIdUser()));
+
+        return $validationUser;
+    }
+
+    //Supprime un utilisateur
+    public function deleteUser(User $user)
+    {
+        $db = $this->dbConnect();
+        $req = $db->prepare('DELETE FROM user WHERE id_user = ?');
+
+        $deleteUser = $req->execute(array($user->getIdUser()));
+
+        return $deleteUser;
     }
 }

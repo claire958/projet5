@@ -1,0 +1,32 @@
+{% if name == "list_users" %}
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des utilisateurs</h6>
+            </div>
+            <div class="card-body">
+                {% for users in users %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-10 mx-auto">
+                                <a href="index.php?page=article&amp;id={{ article.idPost }}">
+                                    <h3>
+                                        {{ users.pseudo }}
+                                    </h3>
+                                </a>
+                                <p style="font-size: 12px">
+                                    Email : {{ users.email }} <br/> Rôle : {{ users.role }} <br/> Validation : {{ users.validation }}
+                                </p>
+                                {% if users.validation == "non" %}
+                                    <a href="index.php?page=validation_user&amp;id={{ users.idUser }}"><button type="button" class="btn btn-outline-success btn-sm"><i class="fas fa-edit"></i> Valider l'utilisateur</button></a>
+                                {% endif %}
+                                <a href="index.php?page=delete_user&amp;id={{ users.idUser }}"><button type="button" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i> Supprimer</button></a>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

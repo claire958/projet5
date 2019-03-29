@@ -44,7 +44,8 @@ class Frontend
      */
     public function index(){
         $renderData = [
-            'pseudo' => $_SESSION['pseudo'] ?? ''
+            'pseudo' => $_SESSION['pseudo'] ?? '',
+            'role' => $_SESSION['role'] ?? ''
         ];
         return $this->twig->render('index.twig', $renderData);
     }
@@ -52,15 +53,30 @@ class Frontend
     /**
      * Affiche blog.twig
      */
-    public function blog(){
+    public function blog($page){
         $postManager = new OpenClassrooms\Blog\Model\PostManager();
         $userManager = new OpenClassrooms\Blog\Model\UserManager();
 
+        $nombreUtilisateurParPage = 5;
+        $nombrePostParPage = 5;
+        $i = "";
+
+        $totalDesMessagesPost = $postManager->countPost();
+
+        // On calcule le nombre de pages à créer
+        $nombreDePagesPosts  = ceil($totalDesMessagesPost / $nombreUtilisateurParPage);
+
+        // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
+        $premierMessageAafficher = ($page - 1) * $nombreUtilisateurParPage;
+
         $renderData = [
-            'post' => $postManager->getListPost(),
-            'users' => $userManager->getListUser(),
+            'post' => $postManager->getListPost($premierMessageAafficher, $nombrePostParPage),
+            'users' => $userManager->getListUser($premierMessageAafficher,$nombreUtilisateurParPage),
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? ''
+            'pseudo' => $_SESSION['pseudo'] ?? '',
+            'role' => $_SESSION['role'] ?? '',
+            'nombreDePagesPosts' => $nombreDePagesPosts,
+            'i' => $i
         ];
 
         return $this->twig->render('blog.twig', $renderData);
@@ -89,7 +105,8 @@ class Frontend
             'message' => $messageErreur,
             'messageValidation' => $messageValidation,
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? ''
+            'pseudo' => $_SESSION['pseudo'] ?? '',
+            'role' => $_SESSION['role'] ?? ''
         ];
         return $this->twig->render('page_login.twig', $renderData);
     }
@@ -97,40 +114,147 @@ class Frontend
     /**
      * Affiche articles.twig
      */
-    public function article($messageErreur=""){
+    public function article($messageErreur, $name, $idComment, $idPost, $page){
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $userManager = new OpenClassrooms\Blog\Model\UserManager();
         $commentManager = new OpenClassrooms\Blog\Model\CommentManager();
 
+        $nombreCommmentaireParPage = 5;
+        $i = "";
+
+        $totalDesMessages = $commentManager->countCommentForPost($idPost);
+
+        // On calcule le nombre de pages à créer
+        $nombreDePagesCommentaires  = ceil($totalDesMessages / $nombreCommmentaireParPage);
+
+        // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
+        $premierMessageAafficher = ($page - 1) * $nombreCommmentaireParPage;
+
         $renderData = [
             'message' => $messageErreur,
-            'article' => $postManager->getPost($_GET['id']),
-            'users' => $userManager->getListUser(),
-            'comment' => $commentManager->getComment($_GET['id']),
+            'article' => $postManager->getPost($idPost),
+            'users' => $userManager->getInfoUser(),
+            'comment' => $commentManager->getComment($idPost, $premierMessageAafficher, $nombreCommmentaireParPage),
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? ''
+            'pseudo' => $_SESSION['pseudo'] ?? '',
+            'idUser' => $userManager->getUser($_SESSION['pseudo']),
+            'name' => $name,
+            'role' => $_SESSION['role'] ?? '',
+            'i' => $i,
+            'nombreDePagesCommentaires' => $nombreDePagesCommentaires
         ];
-        return $this->twig->render('articles.twig', $renderData);
 
+
+        if ($name == "form_comment_update_blog"){
+            $renderData = [
+                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'name' => $name,
+                'message' => $messageErreur,
+                'commentUpdate' => $commentManager->getCommentUpdate($idComment)
+            ];
+        }
+
+        return $this->twig->render('articles.twig', $renderData);
     }
 
     /**
      * Affiche dashboard.twig
      */
-    public function dashboard($name, $messageDashboard=""){
+    public function dashboard($name, $messageDashboard, $page){
 
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $userManager = new \OpenClassrooms\Blog\Model\UserManager();
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
 
+
+        //PAGE HOME DASHBOARD
+
         $renderData = [
             'pseudo' => $_SESSION['pseudo'] ?? '',
             'name' => $name,
-            'post' => $postManager->getListPost(),
-            'users' => $userManager->getListUser(),
-            'comment' => $commentManager->getListComment(),
-            'message' => $messageDashboard,
+            'message' => $messageDashboard
         ];
+
+
+        //PAGE COMMENTAIRES
+
+        if($name == "comments_list_dashboard"){
+            $nombreCommmentaireParPage = 5;
+            $i = "";
+
+            $totalDesMessages = $commentManager->countComment();
+
+            // On calcule le nombre de pages à créer
+            $nombreDePagesCommentaires  = ceil($totalDesMessages / $nombreCommmentaireParPage);
+
+            // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
+            $premierMessageAafficher = ($page - 1) * $nombreCommmentaireParPage;
+
+            $renderData = [
+                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'name' => $name,
+                'comment' => $commentManager->getListComment($premierMessageAafficher, $nombreCommmentaireParPage),
+                'message' => $messageDashboard,
+                'nombreDePagesCommentaires' => $nombreDePagesCommentaires,
+                'i' => $i
+            ];
+            return $this->twig->render('dashboard.twig', $renderData);
+        }
+
+
+        //PAGE UTILISATEURS
+
+        if($name == "list_users"){
+            $nombreUtilisateurParPage = 5;
+            $i = "";
+
+            $totalDesMessages = $userManager->countUser();
+
+            // On calcule le nombre de pages à créer
+            $nombreDePagesUsers  = ceil($totalDesMessages / $nombreUtilisateurParPage);
+
+            // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
+            $premierMessageAafficher = ($page - 1) * $nombreUtilisateurParPage;
+
+            $renderData = [
+                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'name' => $name,
+                'users' => $userManager->getListUser($premierMessageAafficher,$nombreUtilisateurParPage),
+                'message' => $messageDashboard,
+                'nombreDePagesUsers' => $nombreDePagesUsers,
+                'i' => $i
+            ];
+            return $this->twig->render('dashboard.twig', $renderData);
+        }
+
+
+        //PAGE POSTS
+
+        if($name == "articles_list_dashboard"){
+            $nombrePostParPage = 5;
+            $i = "";
+
+            $totalDesMessages = $postManager->countPost();
+
+            // On calcule le nombre de pages à créer
+            $nombreDePagesPosts  = ceil($totalDesMessages / $nombrePostParPage);
+
+            // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
+            $premierMessageAafficher = ($page - 1) * $nombrePostParPage;
+
+            $renderData = [
+                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'name' => $name,
+                'post' => $postManager->getListPost($premierMessageAafficher, $nombrePostParPage),
+                'message' => $messageDashboard,
+                'nombreDePagesPosts' => $nombreDePagesPosts,
+                'i' => $i
+            ];
+            return $this->twig->render('dashboard.twig', $renderData);
+        }
+
+
+        //PAGE MODIFIER POST
 
         if ($name == "form_update_post"){
             $renderData = [
@@ -141,6 +265,9 @@ class Frontend
             ];
             return $this->twig->render('dashboard.twig', $renderData);
         }
+
+
+        //PAGE MODIFIER COMMENTAIRE
 
         if ($name == "form_update_comment"){
             $renderData = [
@@ -237,21 +364,29 @@ class Frontend
             $userManager = new \OpenClassrooms\Blog\Model\UserManager();
             $newUser = $userManager->getUser($pseudo);
 
-            $_SESSION['id_user'] = $newUser->getIdUser();
-            $_SESSION['pseudo'] = $newUser->getPseudo();
+            $validation = $newUser->getValidation();
 
-            return $this->dashboard("dashboard","");
+        if ($validation == "non") {
+            return $this->login("Votre compte n'a pas encore été validé !");
         }
+                $_SESSION['id_user'] = $newUser->getIdUser();
+                $_SESSION['pseudo'] = $newUser->getPseudo();
+                $_SESSION['role'] = $newUser->getRole();
 
-        else{
-            return $this->login("Mauvais identifiant ou mot de passe !");
-        }
+                if ($_SESSION['role'] != "user" ){
+                return $this->dashboard("dashboard","", "");
+                }
+                return $this->index();
+            }
+            else{
+                return $this->login("Mauvais identifiant ou mot de passe !");
+            }
     }
 
     /**
      * Validation d'un utilisateur
      */
-    public function validationUser($idUser){
+    public function validationUser($idUser, $page){
 
         $user = new \OpenClassrooms\Blog\Model\User("");
         $user->setIdUser($idUser);
@@ -260,13 +395,13 @@ class Frontend
         $userManager = new \OpenClassrooms\Blog\Model\UserManager();
         $userManager->validationUser($user);
 
-        return $this->dashboard("list_users", "Votre utilisateur a bien été validé !");
+        return $this->dashboard("list_users", "Votre utilisateur a bien été validé !", $page);
     }
 
     /**
      * Supprimer un utilisateur
      */
-    public function deleteUser($idUser){
+    public function deleteUser($idUser, $page){
 
         $user = new \OpenClassrooms\Blog\Model\User("");
         $user->setIdUser($idUser);
@@ -274,7 +409,7 @@ class Frontend
         $userManager = new \OpenClassrooms\Blog\Model\UserManager();
         $userManager->deleteUser($user);
 
-        return $this->dashboard("list_users", "Votre utilisateur a bien été supprimé !");
+        return $this->dashboard("list_users", "Votre utilisateur a bien été supprimé !", $page);
     }
 
 
@@ -284,14 +419,14 @@ class Frontend
     /**
      * Ajouter un commentaire
      */
-    public function addComment($comment, $idPost){
+    public function addComment($comment, $idPost, $name , $page){
 
         if (empty($comment) || empty($idPost)) {
-            return $this->article("Un champs n'est pas renseigné.");
+            return $this->article("Un champs n'est pas renseigné.", $name, -1, $idPost, $page);
         }
 
         if (empty ($_SESSION['id_user'])){
-            return $this->article(" Il faut vous connecter pour pouvoir poster un commentaire !");
+            return $this->article(" Il faut vous connecter pour pouvoir poster un commentaire !", $name, -1, $idPost,$page);
         }
 
         $newComment = new \OpenClassrooms\Blog\Model\Comment("");
@@ -306,29 +441,36 @@ class Frontend
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         ['article' => $postManager->getPost($idPost)];
 
-        return $this->article("");
+        return $this->article("Votre commentaire a bien été ajouté. Il est en attente d'approbation par un administrateur.", $name, -1, $idPost, $page);
     }
 
     /**
      * Modifier un commentaire
      */
-    public function updateComment($comment, $idComment){
+    public function updateComment($comment, $idComment, $name, $idPost, $page){
 
         $newComment = new \OpenClassrooms\Blog\Model\Comment("");
         $newComment->setComment($comment);
         $newComment->setIdComment($idComment);
         $newComment->setIdUser($_SESSION['id_user']);
+        $newComment->setIdPost($idPost);
 
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
         $commentManager->updateComment($newComment);
 
-        return $this->dashboard("comments_list_dashboard", "Votre commentaire a bien été modifié !");
+        if($name == "update_comment_dashboard"){
+            return $this->dashboard("comments_list_dashboard", "Votre commentaire a bien été modifié !", $page);
+        }
+
+        if($name == "update_comment_blog") {
+            return $this->article("Votre commentaire a bien été modifié !", "comment", $idComment, $idPost);
+        }
     }
 
     /**
      * Valider un commentaire
      */
-    public function validationComment($idComment){
+    public function validationComment($idComment, $page){
 
         $newComment = new \OpenClassrooms\Blog\Model\Comment("");
         $newComment->setValidation("oui");
@@ -337,13 +479,13 @@ class Frontend
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
         $commentManager->validationComment($newComment);
 
-        return $this->dashboard("comments_list_dashboard", "Votre commentaire a bien été validé !");
+        return $this->dashboard("comments_list_dashboard", "Votre commentaire a bien été validé !", $page);
     }
 
     /**
      * Supprimer un commentaire
      */
-    public function deleteComment($idComment){
+    public function deleteComment($idComment, $page){
 
         $newComment = new \OpenClassrooms\Blog\Model\Comment("");
         $newComment->setIdComment($idComment);
@@ -351,7 +493,7 @@ class Frontend
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
         $commentManager->deleteComment($newComment);
 
-        return $this->dashboard("comments_list_dashboard", "Votre commentaire a bien été supprimé !");
+        return $this->dashboard("comments_list_dashboard", "Votre commentaire a bien été supprimé !", $page);
     }
 
 
@@ -361,7 +503,7 @@ class Frontend
     /**
      * Ajouter un article
      */
-    public function addPost($titre, $introduction, $contenu){
+    public function addPost($titre, $introduction, $contenu, $page){
 
         $post = new \OpenClassrooms\Blog\Model\post("");
         $post->setTitle($titre);
@@ -372,13 +514,13 @@ class Frontend
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $postManager->addPost($post);
 
-        return $this->dashboard("", "Votre article a bien été ajouté !");
+        return $this->dashboard("articles_list_dashboard", "Votre article a bien été ajouté !", $page);
     }
 
     /**
      * Supprimer un article
      */
-    public function deletePost($idPost){
+    public function deletePost($idPost, $page){
 
         $post = new \OpenClassrooms\Blog\Model\post("");
         $post->setIdPost($idPost);
@@ -386,13 +528,13 @@ class Frontend
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $postManager->deletePost($post);
 
-        return $this->dashboard("articles_list_dashboard", "Votre article a bien été supprimé !");
+        return $this->dashboard("articles_list_dashboard", "Votre article a bien été supprimé !", $page);
     }
 
     /**
      * Modifier un article
      */
-    public function updatePost($titre, $introduction, $contenu, $idPost){
+    public function updatePost($titre, $introduction, $contenu, $idPost, $page){
 
         $post = new \OpenClassrooms\Blog\Model\post("");
         $post->setTitle($titre);
@@ -404,6 +546,6 @@ class Frontend
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $postManager->updatePost($post);
 
-        return $this->dashboard("articles_list_dashboard", "Votre article a bien été modifié !");
+        return $this->dashboard("articles_list_dashboard", "Votre article a bien été modifié !", $page);
     }
 }

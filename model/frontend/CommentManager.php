@@ -17,13 +17,18 @@ use PDO;
 class CommentManager extends Manager
 {
     //Récupère la liste des commentaires d'un article - classement par date + DESC
-    public function getComment($postId)
+    public function getComment($postId, $premierMessageAafficher, $nombreCommmentaireParPage)
     {
         $comments = [];
+        $validation = 'oui';
 
         $db = $this->dbConnect();
-        $req = $db->prepare('SELECT *, DATE_FORMAT(date_comment, \'%d/%m/%Y - %Hh%imin%ss\') AS dateComment FROM comment WHERE id_post = ? ORDER BY date_comment DESC');
-        $req->execute(array($postId));
+        $req = $db->prepare('SELECT *, DATE_FORMAT(date_comment, \'%d/%m/%Y - %Hh%imin%ss\') AS dateComment FROM comment WHERE id_post = :id AND validation = :validation ORDER BY date_comment DESC LIMIT :start, :length');
+        $req->bindParam('start', $premierMessageAafficher, \PDO::PARAM_INT);
+        $req->bindParam('length', $nombreCommmentaireParPage, \PDO::PARAM_INT);
+        $req->bindParam('id', $postId);
+        $req->bindParam('validation', $validation);
+        $req->execute();
 
         while($donneesComment = $req->fetch(PDO::FETCH_ASSOC))
         {
@@ -44,12 +49,15 @@ class CommentManager extends Manager
     }
 
     //Récupère l'ensemble des commentaires - classement par date
-    public function getListComment()
+    public function getListComment($premierMessageAafficher, $nombreCommmentaireParPage)
     {
         $comments = [];
 
         $db = $this->dbConnect();
-        $req = $db->query('SELECT *, DATE_FORMAT(date_comment, \'%d/%m/%Y - %Hh%imin%ss\') AS dateComment FROM comment ORDER BY date_comment DESC');
+        $req = $db->prepare('SELECT *, DATE_FORMAT(date_comment, \'%d/%m/%Y - %Hh%imin%ss\') AS dateComment FROM comment ORDER BY date_comment DESC LIMIT :start, :length');
+        $req->bindParam('start', $premierMessageAafficher, \PDO::PARAM_INT);
+        $req->bindParam('length', $nombreCommmentaireParPage, \PDO::PARAM_INT);
+        $req->execute();
 
         while($donneesComment = $req->fetch(PDO::FETCH_ASSOC))
         {
@@ -96,10 +104,36 @@ class CommentManager extends Manager
     public function updateComment(Comment $newComment)
     {
         $db = $this->dbConnect();
-        $req = $db->prepare('UPDATE comment SET comment = ?, date_comment = NOW(), id_user = ? WHERE id_comment= ?');
+        $req = $db->prepare('UPDATE comment SET comment = ?, date_comment = NOW(), id_user = ? WHERE id_comment = ? AND id_post = ?');
 
-        $updateComment = $req->execute(array($newComment->getComment(), $newComment->getIdUser(), $newComment->getIdComment()));
+        $updateComment = $req->execute(array($newComment->getComment(), $newComment->getIdUser(), $newComment->getIdComment(), $newComment->getIdPost()));
 
         return $updateComment;
+    }
+
+    // On récupère le nombre total de commentaires
+    public function countComment()
+    {
+        $db = $this->dbConnect();
+        $req = $db->prepare('SELECT COUNT(id_comment) AS nb_messages FROM comment');
+        $req->execute();
+
+        $totalDesMessages = $req->fetch(PDO::FETCH_ASSOC);
+
+        return $totalDesMessages['nb_messages'];
+    }
+
+    // On récupère le nombre total de commentaires pour un article
+    public function countCommentForPost($postId)
+    {
+        $validation = "oui";
+
+        $db = $this->dbConnect();
+        $req = $db->prepare('SELECT COUNT(id_comment) AS nb_messages FROM comment WHERE id_post = ? AND validation = ?');
+        $req->execute(array($postId, $validation));
+
+        $totalDesMessages = $req->fetch(PDO::FETCH_ASSOC);
+
+        return $totalDesMessages['nb_messages'];
     }
 }

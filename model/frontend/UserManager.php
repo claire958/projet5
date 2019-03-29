@@ -16,14 +16,17 @@ use PDO;
 class UserManager extends Manager
 {
     //Récupère la liste des utilisateurs - classement par id
-    public function getListUser()
+    public function getListUser($premierMessageAafficher, $nombreUtilisateurParPage)
     {
         $users = [];
 
         $db = $this->dbConnect();
-        $listUser = $db->query('SELECT id_user, pseudo, email, password, role, validation FROM user');
+        $req = $db->prepare('SELECT id_user, pseudo, email, password, role, validation FROM user LIMIT :start, :length');
+        $req->bindParam('start', $premierMessageAafficher, \PDO::PARAM_INT);
+        $req->bindParam('length', $nombreUtilisateurParPage, \PDO::PARAM_INT);
+        $req->execute();
 
-        while($donneesUser = $listUser->fetch(PDO::FETCH_ASSOC))
+        while($donneesUser = $req->fetch(PDO::FETCH_ASSOC))
         {
             $users[$donneesUser['id_user']] = new User($donneesUser);
         }
@@ -58,6 +61,21 @@ class UserManager extends Manager
         else{
             return new User($currentUser);
         }
+    }
+
+    //Récupère les données d'un utilisateur
+    public function getInfoUser()
+    {
+        $db = $this->dbConnect();
+        $getUser = $db->prepare('SELECT * FROM user');
+        $getUser->execute();
+
+        while($donneesUser = $getUser->fetch(PDO::FETCH_ASSOC))
+        {
+            $users[$donneesUser['id_user']] = new User($donneesUser);
+        }
+
+        return $users;
     }
 
     //Récupère les données d'un utilisateur - tri par email
@@ -98,5 +116,17 @@ class UserManager extends Manager
         $deleteUser = $req->execute(array($user->getIdUser()));
 
         return $deleteUser;
+    }
+
+    // On récupère le nombre total d'utilisateurs
+    public function countUser()
+    {
+        $db = $this->dbConnect();
+        $req = $db->prepare('SELECT COUNT(id_user) AS nb_messages FROM user');
+        $req->execute();
+
+        $totalDesMessages = $req->fetch(PDO::FETCH_ASSOC);
+
+        return $totalDesMessages['nb_messages'];
     }
 }

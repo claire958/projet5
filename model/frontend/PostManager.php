@@ -9,11 +9,14 @@ use PDO;
 
 class PostManager extends Manager
 {
-    //Récupère la liste des articles - classement par id - limit à 10
-    public function getListPost()
+    //Récupère la liste des articles - classement par id
+    public function getListPost($premierMessageAafficher, $nombrePostParPage)
     {
         $db = $this->dbConnect();
-        $req = $db->query('SELECT *, DATE_FORMAT(date_update, \'%d/%m/%Y - %Hh%imin%ss\') AS dateUpdate FROM post ORDER BY id_post DESC LIMIT 10');
+        $req = $db->prepare('SELECT *, DATE_FORMAT(date_update, \'%d/%m/%Y - %Hh%imin%ss\') AS dateUpdate FROM post ORDER BY id_post DESC LIMIT :start, :length');
+        $req->bindParam('start', $premierMessageAafficher, \PDO::PARAM_INT);
+        $req->bindParam('length', $nombrePostParPage, \PDO::PARAM_INT);
+        $req->execute();
 
         while($donneesPost = $req->fetch(PDO::FETCH_ASSOC))
         {
@@ -65,5 +68,17 @@ class PostManager extends Manager
         $updatePost = $req->execute(array($post->getTitle(), $post->getIntroduction(), $post->getContent(), $post->getIdUser(), $post->getIdPost()));
 
         return $updatePost;
+    }
+
+    // On récupère le nombre total de posts
+    public function countPost()
+    {
+        $db = $this->dbConnect();
+        $req = $db->prepare('SELECT COUNT(id_post) AS nb_messages FROM post');
+        $req->execute();
+
+        $totalDesMessages = $req->fetch(PDO::FETCH_ASSOC);
+
+        return $totalDesMessages['nb_messages'];
     }
 }

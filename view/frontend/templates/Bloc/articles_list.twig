@@ -4,7 +4,7 @@
           <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
               <div class="post-preview">
-                <a href="index.php?page=article&amp;id={{ article.idPost }}">
+                <a href="index.php?page=article&amp;id_post={{ article.idPost }}">
                   <h2 class="post-title">
                     {{ article.title }}
                   </h2>
@@ -13,7 +13,7 @@
                   </h3>
                 </a>
                 <p class="post-meta">Posted by
-                  <a href="#">{{ users[article.idUser].pseudo }}</a>
+                  {{ users[article.idUser].pseudo }}
                   on {{ article.dateUpdate }}</p>
               </div>
               <hr>
@@ -21,3 +21,11 @@
           </div>
     </div>
 {% endfor %}
+{# PAGINATION #}
+<nav aria-label="...">
+    <ul class="pagination justify-content-center">
+        {% for i in 1..nombreDePagesPosts %}
+            <li class="page-item"><a class="page-link" href="index.php?page=blog&amp;idPage={{ i }}">{{ i }}</a></li>
+        {% endfor %}
+    </ul>
+</nav>

@@ -28,7 +28,7 @@
                                             on {{ article.dateUpdate }}</p>
 
                                     <a href="index.php?page=dashboard&amp;name=form_update_post&amp;id={{ article.idPost }}"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Modifier</button></a>
-                                    <a href="index.php?page=delete_post&amp;id={{ article.idPost }}"><button type="button" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i> Supprimer</button></a>
+                                    <a href="index.php?page=delete_post&amp;id_post={{ article.idPost }}"><button type="button" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i> Supprimer</button></a>
 
                                     <hr>
 
@@ -36,13 +36,12 @@
                             </div>
                     {% endfor %}
 
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        {# PAGINATION #}
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-center">
+                                {% for i in 1..nombreDePagesPosts %}
+                                    <li class="page-item"><a class="page-link" href="index.php?page=dashboard&amp;name=articles_list_dashboard&amp;idPage={{ i }}">{{ i }}</a></li>
+                                {% endfor %}
                             </ul>
                         </nav>
 

@@ -5,15 +5,20 @@
                 <h6 class="m-0 font-weight-bold text-primary">Liste des utilisateurs</h6>
             </div>
             <div class="card-body">
-                {% for users in users %}
                     <div class="container">
+                        {% if message == true %}
+                            <div class="row">
+                                <div class="alert alert-success" role="alert">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% for users in users %}
                         <div class="row">
                             <div class="col-lg-8 col-md-10 mx-auto">
-                                <a href="index.php?page=article&amp;id={{ article.idPost }}">
-                                    <h3>
+                                    <h3 style="color: #2e59d9">
                                         {{ users.pseudo }}
                                     </h3>
-                                </a>
                                 <p style="font-size: 12px">
                                     Email : {{ users.email }} <br/> Rôle : {{ users.role }} <br/> Validation : {{ users.validation }}
                                 </p>
@@ -24,8 +29,17 @@
                                 <hr>
                             </div>
                         </div>
+                        {% endfor %}
+
+                        {# PAGINATION #}
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-center">
+                                {% for i in 1..nombreDePagesUsers %}
+                                    <li class="page-item"><a class="page-link" href="index.php?page=dashboard&amp;name=list_users&amp;idPage={{ i }}">{{ i }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </nav>
                     </div>
-                {% endfor %}
             </div>
         </div>
     </div>

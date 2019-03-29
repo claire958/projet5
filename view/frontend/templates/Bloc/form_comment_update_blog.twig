@@ -1,0 +1,23 @@
+{% if name == "form_comment_update_blog" %}
+<div class="container" style="margin-top: 40px;">
+    <div class="row">
+        <div class="col-lg-9 col-md-10 mx-auto">
+            <div class="comments">
+                <h4>UPDATE YOUR COMMENT</h4>
+                <div class="heading-line"></div>
+                    <p class="page-content">
+                        {% if idUser.idUser == comment.idUser %}
+                            <form action="index.php?page=update_comment&amp;id_comment={{ commentUpdate.idComment }}&amp;name=update_comment_blog&amp;id_post={{ commentUpdate.idPost }}#comment" method="post" role="form">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Comment :</label>
+                                    <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="4" maxlength="255" required>{{ commentUpdate.comment }}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2">Update</button>
+                            </form>
+                        {% endif %}
+                    </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

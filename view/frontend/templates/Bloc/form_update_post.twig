@@ -6,9 +6,16 @@
             </div>
             <div class="card-body">
                 <div class="container">
+                    {% if message == true %}
+                        <div class="row">
+                            <div class="alert alert-success" role="alert">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endif %}
                     <div class="row">
                         <div class="col-lg-12 col-md-10 mx-auto">
-                            <form action="index.php?page=update_post&amp;id={{ article.idPost }}" method="post" role="form">
+                            <form action="index.php?page=update_post&amp;id_post={{ article.idPost }}" method="post" role="form">
                                 <div class="form-group">
                                     <label for="exampleFormControlInput1">Titre</label>
                                     <input type="text" name="titre" class="form-control" id="exampleFormControlInput1" placeholder="" value="{{ article.title }}" maxlength="25" autofocus required>
@@ -25,17 +32,6 @@
                             </form>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endif %}
-{% if message == true %}
-    <div class="card-body">
-        <div class="container">
-            <div class="row">
-                <div class="alert alert-success" role="alert">
-                    {{ message }}
                 </div>
             </div>
         </div>

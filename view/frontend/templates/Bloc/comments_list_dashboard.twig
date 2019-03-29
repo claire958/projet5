@@ -5,12 +5,18 @@
                 <h6 class="m-0 font-weight-bold text-primary">Liste des commentaires</h6>
             </div>
             <div class="card-body">
-                {% for comment in comment %}
-
-                    <div class="container">
+                <div class="container">
+                        {% if message == true %}
+                            <div class="row">
+                                <div class="alert alert-success" role="alert">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% for comment in comment %}
                         <div class="row">
                             <div class="col-lg-8 col-md-10 mx-auto">
-                                <a href="index.php?page=article&amp;id={{ article.idPost }}">
+                                <a href="index.php?page=dashboard&amp;name=form_update_comment&amp;id={{ comment.idComment }}">
                                     <h3>
                                         {{ comment.comment }}
                                     </h3>
@@ -32,26 +38,16 @@
                                 <hr>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-                <nav aria-label="...">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <span class="page-link">Previous</span>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item">
-      <span class="page-link">
-        2
-        <span class="sr-only">(current)</span>
-      </span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                {# PAGINATION #}
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-center">
+                            {% for i in 1..nombreDePagesCommentaires %}
+                              <li class="page-item"><a class="page-link" href="index.php?page=dashboard&amp;name=comments_list_dashboard&amp;idPage={{ i }}">{{ i }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
             </div>
         </div>
     </div>

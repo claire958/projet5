@@ -20,8 +20,10 @@
                 {{ pseudo }}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="index.php?page=dashboard">My dashboard</a>
+                {% if role == "admin" %}
+                  <a class="dropdown-item" href="index.php?page=dashboard">My dashboard</a>
                 <div class="dropdown-divider"></div>
+                {% endif %}
                 <a class="dropdown-item" href="index.php?page=sign_out">Sign out</a>
               </div>
             </li>

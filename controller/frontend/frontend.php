@@ -91,7 +91,8 @@ class Frontend
             'message' => $messageErreur,
             'messageValidation' => $messageValidation,
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? ''
+            'pseudo' => $_SESSION['pseudo'] ?? '',
+            'role' => $_SESSION['role'] ?? ''
         ];
         return $this->twig->render('page_register.twig', $renderData);
     }
@@ -130,14 +131,16 @@ class Frontend
         // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
         $premierMessageAafficher = ($page - 1) * $nombreCommmentaireParPage;
 
+        $pseudo = $_SESSION['pseudo'] ?? '';
+
         $renderData = [
             'message' => $messageErreur,
             'article' => $postManager->getPost($idPost),
             'users' => $userManager->getInfoUser(),
             'comment' => $commentManager->getComment($idPost, $premierMessageAafficher, $nombreCommmentaireParPage),
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? '',
-            'idUser' => $userManager->getUser($_SESSION['pseudo']),
+            'pseudo' => $pseudo,
+            'idUser' => $userManager->getUser($pseudo),
             'name' => $name,
             'role' => $_SESSION['role'] ?? '',
             'i' => $i,
@@ -172,7 +175,7 @@ class Frontend
         $renderData = [
             'pseudo' => $_SESSION['pseudo'] ?? '',
             'name' => $name,
-            'message' => $messageDashboard
+            'message' => $messageDashboard,
         ];
 
 
@@ -180,6 +183,7 @@ class Frontend
 
         if($name == "comments_list_dashboard"){
             $nombreCommmentaireParPage = 5;
+
             $i = "";
 
             $totalDesMessages = $commentManager->countComment();
@@ -194,6 +198,8 @@ class Frontend
                 'pseudo' => $_SESSION['pseudo'] ?? '',
                 'name' => $name,
                 'comment' => $commentManager->getListComment($premierMessageAafficher, $nombreCommmentaireParPage),
+                'post' => $postManager->getInfoPost(),
+                'users' => $userManager->getInfoUser(),
                 'message' => $messageDashboard,
                 'nombreDePagesCommentaires' => $nombreDePagesCommentaires,
                 'i' => $i
@@ -246,6 +252,7 @@ class Frontend
                 'pseudo' => $_SESSION['pseudo'] ?? '',
                 'name' => $name,
                 'post' => $postManager->getListPost($premierMessageAafficher, $nombrePostParPage),
+                'users' => $userManager->getInfoUser(),
                 'message' => $messageDashboard,
                 'nombreDePagesPosts' => $nombreDePagesPosts,
                 'i' => $i

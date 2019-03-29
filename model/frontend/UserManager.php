@@ -63,7 +63,7 @@ class UserManager extends Manager
         }
     }
 
-    //Récupère les données d'un utilisateur
+    //Récupère les données des utilisateurs
     public function getInfoUser()
     {
         $db = $this->dbConnect();

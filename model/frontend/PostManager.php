@@ -81,4 +81,19 @@ class PostManager extends Manager
 
         return $totalDesMessages['nb_messages'];
     }
+
+    //Récupère les données des posts
+    public function getInfoPost()
+    {
+        $db = $this->dbConnect();
+        $req = $db->prepare('SELECT * FROM post');
+        $req->execute();
+
+        while($donneesPost = $req->fetch(PDO::FETCH_ASSOC))
+        {
+            $posts[$donneesPost['id_post']] = new Post($donneesPost);
+        }
+
+        return $posts;
+    }
 }

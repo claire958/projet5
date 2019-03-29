@@ -31,6 +31,12 @@ require_once ('config.php');
      }
      $name="comment";
      if (isset($_GET['name']) && $_GET['name'] == "form_comment_update_blog") {
+         if (isset($_GET['idPage'])){
+             $page = ($_GET['idPage']);
+         }
+         else {
+             $page = 1;
+         }
          $name="form_comment_update_blog";
      }
      $frontend = new Frontend();
@@ -81,6 +87,12 @@ require_once ('config.php');
  }elseif (isset($_GET['page']) && $_GET['page'] == "update_comment") {
      $name="";
      if (isset($_GET['name']) && $_GET['name'] == "update_comment_blog") {
+         if (isset($_GET['idPage'])){
+             $page = ($_GET['idPage']);
+         }
+         else {
+             $page = 1;
+         }
          $name="update_comment_blog";
      }
      if (isset($_GET['name']) && $_GET['name'] == "update_comment_dashboard") {

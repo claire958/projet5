@@ -463,7 +463,7 @@ class Frontend
         }
 
         if($name == "update_comment_blog") {
-            return $this->article("Votre commentaire a bien été modifié !", "comment", $idComment, $idPost);
+            return $this->article("Votre commentaire a bien été modifié !", "comment", $idComment, $idPost, $page);
         }
     }
 

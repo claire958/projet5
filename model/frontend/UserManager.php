@@ -55,7 +55,7 @@ class UserManager extends Manager
 
         $currentUser = ($getUser->fetch(PDO::FETCH_ASSOC));
 
-        if($currentUser == false){
+        if($currentUser === false){
             return false;
         }
         else{
@@ -88,7 +88,7 @@ class UserManager extends Manager
 
         $currentUser = ($getUserMail->fetch(PDO::FETCH_ASSOC));
 
-        if($currentUser == false){
+        if($currentUser === false){
             return false;
         }
         else{

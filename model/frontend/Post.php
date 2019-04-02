@@ -116,3 +116,4 @@ class Post extends Entites
         $this->idUser = $idUser;
     }
 }
+

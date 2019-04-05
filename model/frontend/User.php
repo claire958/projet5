@@ -8,7 +8,7 @@
 
 namespace OpenClassrooms\Blog\Model;
 
-require_once("model/frontend/Entites.php");
+require_once 'model/frontend/Entites.php';
 
 class User extends Entites
 {

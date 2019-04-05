@@ -8,8 +8,8 @@
 
 namespace OpenClassrooms\Blog\Model;
 
-require_once("model/frontend/Manager.php");
-require_once("model/frontend/Entites.php");
+require_once 'model/frontend/Manager.php';
+require_once 'model/frontend/Entites.php';
 
 use PDO;
 

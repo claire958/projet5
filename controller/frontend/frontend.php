@@ -42,10 +42,10 @@ class Frontend
     /**
      * Affiche index.twig
      */
-    public function index(){
+    public function index($pseudo, $role){
         $renderData = [
-            'pseudo' => $_SESSION['pseudo'] ?? '',
-            'role' => $_SESSION['role'] ?? ''
+            'pseudo' => $pseudo,
+            'role' => $role
         ];
         return $this->twig->render('index.twig', $renderData);
     }
@@ -53,13 +53,12 @@ class Frontend
     /**
      * Affiche blog.twig
      */
-    public function blog($page){
+    public function blog($page, $pseudo, $role){
         $postManager = new OpenClassrooms\Blog\Model\PostManager();
         $userManager = new OpenClassrooms\Blog\Model\UserManager();
 
         $nombreUtilisateurParPage = 5;
         $nombrePostParPage = 5;
-        $i = "";
 
         $totalDesMessagesPost = $postManager->countPost();
 
@@ -73,10 +72,9 @@ class Frontend
             'post' => $postManager->getListPost($premierMessageAafficher, $nombrePostParPage),
             'users' => $userManager->getListUser($premierMessageAafficher,$nombreUtilisateurParPage),
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? '',
-            'role' => $_SESSION['role'] ?? '',
-            'nombreDePagesPosts' => $nombreDePagesPosts,
-            'i' => $i
+            'pseudo' => $pseudo,
+            'role' => $role,
+            'nombreDePagesPosts' => $nombreDePagesPosts
         ];
 
         return $this->twig->render('blog.twig', $renderData);
@@ -91,8 +89,8 @@ class Frontend
             'message' => $messageErreur,
             'messageValidation' => $messageValidation,
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? '',
-            'role' => $_SESSION['role'] ?? ''
+            'pseudo' => filter_input(INPUT_SESSION, 'pseudo') ?? "",
+            'role' => filter_input(INPUT_SESSION, 'role') ?? ""
         ];
         return $this->twig->render('page_register.twig', $renderData);
     }
@@ -106,8 +104,8 @@ class Frontend
             'message' => $messageErreur,
             'messageValidation' => $messageValidation,
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => $_SESSION['pseudo'] ?? '',
-            'role' => $_SESSION['role'] ?? ''
+            'pseudo' => filter_input(INPUT_SESSION, 'pseudo') ?? "",
+            'role' => filter_input(INPUT_SESSION, 'role') ?? ""
         ];
         return $this->twig->render('page_login.twig', $renderData);
     }
@@ -121,7 +119,6 @@ class Frontend
         $commentManager = new OpenClassrooms\Blog\Model\CommentManager();
 
         $nombreCommmentaireParPage = 5;
-        $i = "";
 
         $totalDesMessages = $commentManager->countCommentForPost($idPost);
 
@@ -131,7 +128,7 @@ class Frontend
         // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
         $premierMessageAafficher = ($page - 1) * $nombreCommmentaireParPage;
 
-        $pseudo = $_SESSION['pseudo'] ?? '';
+        $pseudo = filter_input(INPUT_SESSION, 'pseudo') ?? "";
 
         $renderData = [
             'message' => $messageErreur,
@@ -140,17 +137,16 @@ class Frontend
             'comment' => $commentManager->getComment($idPost, $premierMessageAafficher, $nombreCommmentaireParPage),
             // $pseudo = (condition) ?? si faux;
             'pseudo' => $pseudo,
+            'role' => filter_input(INPUT_SESSION, 'role') ?? "",
             'idUser' => $userManager->getUser($pseudo),
             'name' => $name,
-            'role' => $_SESSION['role'] ?? '',
-            'i' => $i,
             'nombreDePagesCommentaires' => $nombreDePagesCommentaires
         ];
 
 
         if ($name == "form_comment_update_blog"){
             $renderData = [
-                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'pseudo' => $pseudo,
                 'name' => $name,
                 'message' => $messageErreur,
                 'commentUpdate' => $commentManager->getCommentUpdate($idComment)
@@ -168,13 +164,14 @@ class Frontend
         $userManager = new \OpenClassrooms\Blog\Model\UserManager();
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
 
+        $pseudo = filter_input(INPUT_SESSION, 'pseudo') ?? "";
+
         //PAGE HOME DASHBOARD
-        $renderData = ['pseudo' => $_SESSION['pseudo'] ?? '', 'name' => $name, 'message' => $messageDashboard,];
+        $renderData = ['pseudo' => $pseudo, 'name' => $name, 'message' => $messageDashboard,];
 
         //PAGE COMMENTAIRES
         if($name == "comments_list_dashboard"){
             $nombreCommmentaireParPage = 5;
-            $i = "";
             $totalDesMessages = $commentManager->countComment();
 
             // On calcule le nombre de pages à créer
@@ -183,14 +180,13 @@ class Frontend
             $premierMessageAafficher = ($page - 1) * $nombreCommmentaireParPage;
 
             $renderData = [
-                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'pseudo' => $pseudo,
                 'name' => $name,
                 'comment' => $commentManager->getListComment($premierMessageAafficher, $nombreCommmentaireParPage),
                 'post' => $postManager->getInfoPost(),
                 'users' => $userManager->getInfoUser(),
                 'message' => $messageDashboard,
-                'nombreDePagesCommentaires' => $nombreDePagesCommentaires,
-                'i' => $i
+                'nombreDePagesCommentaires' => $nombreDePagesCommentaires
             ];
             return $this->twig->render('dashboard.twig', $renderData);
         }
@@ -198,7 +194,6 @@ class Frontend
         //PAGE UTILISATEURS
         if($name == "list_users"){
             $nombreUtilisateurParPage = 5;
-            $i = "";
             $totalDesMessages = $userManager->countUser();
 
             // On calcule le nombre de pages à créer
@@ -207,12 +202,11 @@ class Frontend
             $premierMessageAafficher = ($page - 1) * $nombreUtilisateurParPage;
 
             $renderData = [
-                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'pseudo' => $pseudo,
                 'name' => $name,
                 'users' => $userManager->getListUser($premierMessageAafficher,$nombreUtilisateurParPage),
                 'message' => $messageDashboard,
-                'nombreDePagesUsers' => $nombreDePagesUsers,
-                'i' => $i
+                'nombreDePagesUsers' => $nombreDePagesUsers
             ];
             return $this->twig->render('dashboard.twig', $renderData);
         }
@@ -220,7 +214,6 @@ class Frontend
         //PAGE POSTS
         if($name == "articles_list_dashboard"){
             $nombrePostParPage = 5;
-            $i = "";
             $totalDesMessages = $postManager->countPost();
 
             // On calcule le nombre de pages à créer
@@ -229,13 +222,12 @@ class Frontend
             $premierMessageAafficher = ($page - 1) * $nombrePostParPage;
 
             $renderData = [
-                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'pseudo' => $pseudo,
                 'name' => $name,
                 'post' => $postManager->getListPost($premierMessageAafficher, $nombrePostParPage),
                 'users' => $userManager->getInfoUser(),
                 'message' => $messageDashboard,
-                'nombreDePagesPosts' => $nombreDePagesPosts,
-                'i' => $i
+                'nombreDePagesPosts' => $nombreDePagesPosts
             ];
             return $this->twig->render('dashboard.twig', $renderData);
         }
@@ -243,10 +235,10 @@ class Frontend
         //PAGE MODIFIER POST
         if ($name == "form_update_post"){
             $renderData = [
-                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'pseudo' => $pseudo,
                 'name' => $name,
                 'message' => $messageDashboard,
-                'article' => $postManager->getPost($_GET['id']),
+                'article' => $postManager->getPost(filter_input(INPUT_GET, 'id')),
             ];
             return $this->twig->render('dashboard.twig', $renderData);
         }
@@ -254,10 +246,10 @@ class Frontend
         //PAGE MODIFIER COMMENTAIRE
         if ($name == "form_update_comment"){
             $renderData = [
-                'pseudo' => $_SESSION['pseudo'] ?? '',
+                'pseudo' => $pseudo,
                 'name' => $name,
                 'message' => $messageDashboard,
-                'commentUpdate' => $commentManager->getCommentUpdate($_GET['id'])
+                'commentUpdate' => $commentManager->getCommentUpdate(filter_input(INPUT_GET, 'id'))
             ];
             return $this->twig->render('dashboard.twig', $renderData);
         }
@@ -345,21 +337,21 @@ class Frontend
 
             $validation = $newUser->getValidation();
 
-        if ($validation == "non") {
-            return $this->login("Votre compte n'a pas encore été validé !");
-        }
-                $_SESSION['id_user'] = $newUser->getIdUser();
-                $_SESSION['pseudo'] = $newUser->getPseudo();
-                $_SESSION['role'] = $newUser->getRole();
+            if ($validation == "non") {
+                return $this->login("Votre compte n'a pas encore été validé !");
+            }
+            $_SESSION['id_user'] = $newUser->getIdUser();
+            $_SESSION['pseudo'] = $newUser->getPseudo();
+            $_SESSION['role'] = $newUser->getRole();
 
-                if ($_SESSION['role'] != "user" ){
+            if ($newUser->getRole() != "user" ){
                 return $this->dashboard("dashboard","", "");
-                }
-                return $this->index();
             }
-            else{
-                return $this->login("Mauvais identifiant ou mot de passe !");
-            }
+            return $this->index($newUser->getPseudo(), $newUser->getRole());
+        }
+        else{
+            return $this->login("Mauvais identifiant ou mot de passe !");
+        }
     }
 
     /**
@@ -404,14 +396,15 @@ class Frontend
             return $this->article("Un champs n'est pas renseigné.", $name, -1, $idPost, $page);
         }
 
-        if (empty ($_SESSION['id_user'])){
+        $idUser = filter_input(INPUT_SESSION, 'id_user');
+        if (!$idUser){
             return $this->article(" Il faut vous connecter pour pouvoir poster un commentaire !", $name, -1, $idPost,$page);
         }
 
         $newComment = new \OpenClassrooms\Blog\Model\Comment("");
         $newComment->setComment($comment);
         $newComment->setIdPost($idPost);
-        $newComment->setIdUser($_SESSION['id_user']);
+        $newComment->setIdUser($idUser);
         $newComment->setValidation("non");
 
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
@@ -431,7 +424,7 @@ class Frontend
         $newComment = new \OpenClassrooms\Blog\Model\Comment("");
         $newComment->setComment($comment);
         $newComment->setIdComment($idComment);
-        $newComment->setIdUser($_SESSION['id_user']);
+        $newComment->setIdUser(filter_input(INPUT_SESSION, 'id_user'));
         $newComment->setIdPost($idPost);
 
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
@@ -488,7 +481,7 @@ class Frontend
         $post->setTitle($titre);
         $post->setIntroduction($introduction);
         $post->setContent($contenu);
-        $post->setIdUser($_SESSION['id_user']);
+        $post->setIdUser(filter_input(INPUT_SESSION, 'id_user'));
 
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $postManager->addPost($post);
@@ -520,7 +513,7 @@ class Frontend
         $post->setIntroduction($introduction);
         $post->setContent($contenu);
         $post->setIdPost($idPost);
-        $post->setIdUser($_SESSION['id_user']);
+        $post->setIdUser(filter_input(INPUT_SESSION, 'id_user'));
 
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $postManager->updatePost($post);

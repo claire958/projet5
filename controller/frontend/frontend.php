@@ -349,9 +349,8 @@ class Frontend
             }
             return $this->index($newUser->getPseudo(), $newUser->getRole());
         }
-        else{
-            return $this->login("Mauvais identifiant ou mot de passe !");
-        }
+
+        return $this->login("Mauvais identifiant ou mot de passe !");
     }
 
     /**

@@ -91,9 +91,8 @@ class UserManager extends Manager
         if($currentUser === false){
             return false;
         }
-        else{
-            return new User($currentUser);
-        }
+
+        return new User($currentUser);
     }
 
     //Mettre à jour l'état de validation d'un utilisateur - non->oui

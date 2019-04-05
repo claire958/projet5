@@ -58,9 +58,8 @@ class UserManager extends Manager
         if($currentUser === false){
             return false;
         }
-        else{
-            return new User($currentUser);
-        }
+
+        return new User($currentUser);
     }
 
     //Récupère les données des utilisateurs

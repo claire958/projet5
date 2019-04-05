@@ -89,8 +89,8 @@ class Frontend
             'message' => $messageErreur,
             'messageValidation' => $messageValidation,
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => filter_input(INPUT_SESSION, 'pseudo') ?? "",
-            'role' => filter_input(INPUT_SESSION, 'role') ?? ""
+            'pseudo' => $_SESSION['pseudo'] ?? '',
+            'role' => $_SESSION['role'] ?? ''
         ];
         return $this->twig->render('page_register.twig', $renderData);
     }
@@ -104,8 +104,8 @@ class Frontend
             'message' => $messageErreur,
             'messageValidation' => $messageValidation,
             // $pseudo = (condition) ?? si faux;
-            'pseudo' => filter_input(INPUT_SESSION, 'pseudo') ?? "",
-            'role' => filter_input(INPUT_SESSION, 'role') ?? ""
+            'pseudo' => $_SESSION['pseudo'] ?? '',
+            'role' => $_SESSION['role'] ?? ''
         ];
         return $this->twig->render('page_login.twig', $renderData);
     }
@@ -128,7 +128,7 @@ class Frontend
         // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
         $premierMessageAafficher = ($page - 1) * $nombreCommmentaireParPage;
 
-        $pseudo = filter_input(INPUT_SESSION, 'pseudo') ?? "";
+        $pseudo = $_SESSION['pseudo'] ?? '';
 
         $renderData = [
             'message' => $messageErreur,
@@ -137,7 +137,7 @@ class Frontend
             'comment' => $commentManager->getComment($idPost, $premierMessageAafficher, $nombreCommmentaireParPage),
             // $pseudo = (condition) ?? si faux;
             'pseudo' => $pseudo,
-            'role' => filter_input(INPUT_SESSION, 'role') ?? "",
+            'role' => $_SESSION['role'] ?? '',
             'idUser' => $userManager->getUser($pseudo),
             'name' => $name,
             'nombreDePagesCommentaires' => $nombreDePagesCommentaires
@@ -164,7 +164,7 @@ class Frontend
         $userManager = new \OpenClassrooms\Blog\Model\UserManager();
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
 
-        $pseudo = filter_input(INPUT_SESSION, 'pseudo') ?? "";
+        $pseudo = $_SESSION['pseudo'] ?? '';
 
         //PAGE HOME DASHBOARD
         $renderData = ['pseudo' => $pseudo, 'name' => $name, 'message' => $messageDashboard,];
@@ -395,7 +395,7 @@ class Frontend
             return $this->article("Un champs n'est pas renseigné.", $name, -1, $idPost, $page);
         }
 
-        $idUser = filter_input(INPUT_SESSION, 'id_user');
+        $idUser = $_SESSION['id_user'];
         if (!$idUser){
             return $this->article(" Il faut vous connecter pour pouvoir poster un commentaire !", $name, -1, $idPost,$page);
         }
@@ -423,7 +423,7 @@ class Frontend
         $newComment = new \OpenClassrooms\Blog\Model\Comment("");
         $newComment->setComment($comment);
         $newComment->setIdComment($idComment);
-        $newComment->setIdUser(filter_input(INPUT_SESSION, 'id_user'));
+        $newComment->setIdUser($_SESSION['id_user']);
         $newComment->setIdPost($idPost);
 
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
@@ -480,7 +480,7 @@ class Frontend
         $post->setTitle($titre);
         $post->setIntroduction($introduction);
         $post->setContent($contenu);
-        $post->setIdUser(filter_input(INPUT_SESSION, 'id_user'));
+        $post->setIdUser($_SESSION['id_user']);
 
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $postManager->addPost($post);
@@ -512,7 +512,7 @@ class Frontend
         $post->setIntroduction($introduction);
         $post->setContent($contenu);
         $post->setIdPost($idPost);
-        $post->setIdUser(filter_input(INPUT_SESSION, 'id_user'));
+        $post->setIdUser($_SESSION['id_user']);
 
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $postManager->updatePost($post);

@@ -12,8 +12,8 @@ $page = filter_input(INPUT_GET, 'page');
 //BLOG
  if ($page === "blog") {
      $idPage = filter_input(INPUT_GET, 'idPage') ?? 1;
-     $pseudo = filter_input(INPUT_SESSION, 'pseudo') ?? "";
-     $role = filter_input(INPUT_SESSION, 'role') ?? "";
+     $pseudo = $_SESSION['pseudo'] ?? '';
+     $role = $_SESSION['role'] ?? '';
 
      $frontend = new Frontend();
      $render = $frontend->blog($idPage, $pseudo, $role);
@@ -21,8 +21,8 @@ $page = filter_input(INPUT_GET, 'page');
 
 //HOME
  }elseif ($page === "home") {
-     $pseudo = filter_input(INPUT_SESSION, 'pseudo') ?? "";
-     $role = filter_input(INPUT_SESSION, 'role') ?? "";
+     $pseudo = $_SESSION['pseudo'] ?? '';
+     $role = $_SESSION['role'] ?? '';
 
      $frontend = new Frontend();
      $render = $frontend->index($pseudo, $role);
@@ -178,8 +178,8 @@ $page = filter_input(INPUT_GET, 'page');
      $render = $frontend->dashboard($name, "", $idPage);
 
  }else {
-     $pseudo = filter_input(INPUT_SESSION, 'pseudo') ?? "";
-     $role = filter_input(INPUT_SESSION, 'role') ?? "";
+     $pseudo = $_SESSION['pseudo'] ?? '';
+     $role = $_SESSION['role'] ?? '';
 
      $frontend = new Frontend();
      $render = $frontend->index($pseudo, $role);

@@ -3,12 +3,12 @@
 /**
  * Les fichiers suivant sont inclus dans frontend.php :
  */
-require_once('model/frontend/Post.php');
-require_once('model/frontend/User.php');
-require_once('model/frontend/Comment.php');
-require_once('model/frontend/PostManager.php');
-require_once('model/frontend/UserManager.php');
-require_once('model/frontend/CommentManager.php');
+require_once 'model/frontend/Post.php';
+require_once 'model/frontend/User.php';
+require_once 'model/frontend/Comment.php';
+require_once 'model/frontend/PostManager.php';
+require_once 'model/frontend/UserManager.php';
+require_once 'model/frontend/CommentManager.php';
 
 
 class Frontend
@@ -164,33 +164,21 @@ class Frontend
      * Affiche dashboard.twig
      */
     public function dashboard($name, $messageDashboard, $page){
-
         $postManager = new \OpenClassrooms\Blog\Model\PostManager();
         $userManager = new \OpenClassrooms\Blog\Model\UserManager();
         $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
 
-
         //PAGE HOME DASHBOARD
-
-        $renderData = [
-            'pseudo' => $_SESSION['pseudo'] ?? '',
-            'name' => $name,
-            'message' => $messageDashboard,
-        ];
-
+        $renderData = ['pseudo' => $_SESSION['pseudo'] ?? '', 'name' => $name, 'message' => $messageDashboard,];
 
         //PAGE COMMENTAIRES
-
         if($name == "comments_list_dashboard"){
             $nombreCommmentaireParPage = 5;
-
             $i = "";
-
             $totalDesMessages = $commentManager->countComment();
 
             // On calcule le nombre de pages à créer
             $nombreDePagesCommentaires  = ceil($totalDesMessages / $nombreCommmentaireParPage);
-
             // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
             $premierMessageAafficher = ($page - 1) * $nombreCommmentaireParPage;
 
@@ -207,18 +195,14 @@ class Frontend
             return $this->twig->render('dashboard.twig', $renderData);
         }
 
-
         //PAGE UTILISATEURS
-
         if($name == "list_users"){
             $nombreUtilisateurParPage = 5;
             $i = "";
-
             $totalDesMessages = $userManager->countUser();
 
             // On calcule le nombre de pages à créer
             $nombreDePagesUsers  = ceil($totalDesMessages / $nombreUtilisateurParPage);
-
             // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
             $premierMessageAafficher = ($page - 1) * $nombreUtilisateurParPage;
 
@@ -233,18 +217,14 @@ class Frontend
             return $this->twig->render('dashboard.twig', $renderData);
         }
 
-
         //PAGE POSTS
-
         if($name == "articles_list_dashboard"){
             $nombrePostParPage = 5;
             $i = "";
-
             $totalDesMessages = $postManager->countPost();
 
             // On calcule le nombre de pages à créer
             $nombreDePagesPosts  = ceil($totalDesMessages / $nombrePostParPage);
-
             // On calcule le numéro du premier message qu'on prend pour le LIMIT de MySQL
             $premierMessageAafficher = ($page - 1) * $nombrePostParPage;
 
@@ -260,9 +240,7 @@ class Frontend
             return $this->twig->render('dashboard.twig', $renderData);
         }
 
-
         //PAGE MODIFIER POST
-
         if ($name == "form_update_post"){
             $renderData = [
                 'pseudo' => $_SESSION['pseudo'] ?? '',
@@ -273,9 +251,7 @@ class Frontend
             return $this->twig->render('dashboard.twig', $renderData);
         }
 
-
         //PAGE MODIFIER COMMENTAIRE
-
         if ($name == "form_update_comment"){
             $renderData = [
                 'pseudo' => $_SESSION['pseudo'] ?? '',
@@ -320,10 +296,6 @@ class Frontend
 
         if ($getMailData != false) {
             return $this->register("Cet email est déjà utilisé !");
-        }
-
-        if (!empty($errorList)) {
-            return $this->register($errorList);
         }
 
         $passHash = password_hash($password, PASSWORD_DEFAULT);

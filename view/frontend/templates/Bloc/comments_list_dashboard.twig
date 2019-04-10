@@ -43,9 +43,11 @@
                 {# PAGINATION #}
                     <nav aria-label="...">
                         <ul class="pagination justify-content-center">
-                            {% for i in 1..nombreDePagesCommentaires %}
-                              <li class="page-item"><a class="page-link" href="index.php?page=dashboard&amp;name=comments_list_dashboard&amp;idPage={{ i }}">{{ i }}</a></li>
-                            {% endfor %}
+                            {% if nombreDePagesCommentaires >= 1 %}
+                                {% for i in 1..nombreDePagesCommentaires %}
+                                  <li class="page-item"><a class="page-link" href="index.php?page=dashboard&amp;name=comments_list_dashboard&amp;idPage={{ i }}">{{ i }}</a></li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </nav>
             </div>

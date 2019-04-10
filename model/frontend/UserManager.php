@@ -21,7 +21,7 @@ class UserManager extends Manager
         $users = [];
 
         $db = $this->dbConnect();
-        $req = $db->prepare('SELECT id_user, pseudo, email, password, role, validation FROM user LIMIT :start, :length');
+        $req = $db->prepare('SELECT id_user, pseudo, email, password, role, validation FROM user ORDER BY id_user DESC LIMIT :start, :length');
         $req->bindParam('start', $premierMessageAafficher, \PDO::PARAM_INT);
         $req->bindParam('length', $nombreUtilisateurParPage, \PDO::PARAM_INT);
         $req->execute();

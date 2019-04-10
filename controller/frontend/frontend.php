@@ -389,30 +389,32 @@ class Frontend
     /**
      * Ajouter un commentaire
      */
-    public function addComment($comment, $idPost, $name , $page){
+    public function addComment($comment, $idPost, $name , $page, $idUser){
 
         if (empty($comment) || empty($idPost)) {
             return $this->article("Un champs n'est pas renseigné.", $name, -1, $idPost, $page);
         }
 
-        $idUser = $_SESSION['id_user'];
-        if (!$idUser){
+        if (empty($idUser)){
             return $this->article(" Il faut vous connecter pour pouvoir poster un commentaire !", $name, -1, $idPost,$page);
         }
 
-        $newComment = new \OpenClassrooms\Blog\Model\Comment("");
-        $newComment->setComment($comment);
-        $newComment->setIdPost($idPost);
-        $newComment->setIdUser($idUser);
-        $newComment->setValidation("non");
+        if ($idUser === $_SESSION['id_user']){
 
-        $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
-        $commentManager->addComment($newComment);
+            $newComment = new \OpenClassrooms\Blog\Model\Comment("");
+            $newComment->setComment($comment);
+            $newComment->setIdPost($idPost);
+            $newComment->setIdUser($idUser);
+            $newComment->setValidation("non");
 
-        $postManager = new \OpenClassrooms\Blog\Model\PostManager();
-        ['article' => $postManager->getPost($idPost)];
+            $commentManager = new \OpenClassrooms\Blog\Model\CommentManager();
+            $commentManager->addComment($newComment);
 
-        return $this->article("Votre commentaire a bien été ajouté. Il est en attente d'approbation par un administrateur.", $name, -1, $idPost, $page);
+            $postManager = new \OpenClassrooms\Blog\Model\PostManager();
+            ['article' => $postManager->getPost($idPost)];
+
+            return $this->article("Votre commentaire a bien été ajouté. Il est en attente d'approbation par un administrateur.", $name, -1, $idPost, $page);
+        }
     }
 
     /**

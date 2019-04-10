@@ -114,9 +114,10 @@ $page = filter_input(INPUT_GET, 'page');
  }elseif ($page === "add_comment") {
      $idPage = filter_input(INPUT_GET, 'idPage') ?? 1;
 
-     $name="comment";
+     $name = "comment";
+     $idUser = $_SESSION['id_user'] ?? "";
      $frontend = new Frontend();
-     $render = $frontend->addComment(htmlspecialchars(filter_input(INPUT_POST,'comment')), filter_input(INPUT_GET,'id_post'), $name, $idPage);
+     $render = $frontend->addComment(htmlspecialchars(filter_input(INPUT_POST,'comment')), filter_input(INPUT_GET,'id_post'), $name, $idPage, $idUser);
 
 
 //DASHBOARD - VALIDER UN COMMENTAIRE

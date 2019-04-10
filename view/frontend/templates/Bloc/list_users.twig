@@ -34,9 +34,11 @@
                         {# PAGINATION #}
                         <nav aria-label="...">
                             <ul class="pagination justify-content-center">
-                                {% for i in 1..nombreDePagesUsers %}
-                                    <li class="page-item"><a class="page-link" href="index.php?page=dashboard&amp;name=list_users&amp;idPage={{ i }}">{{ i }}</a></li>
-                                {% endfor %}
+                                {% if nombreDePagesUsers >= 1 %}
+                                    {% for i in 1..nombreDePagesUsers %}
+                                        <li class="page-item"><a class="page-link" href="index.php?page=dashboard&amp;name=list_users&amp;idPage={{ i }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
                             </ul>
                         </nav>
                     </div>

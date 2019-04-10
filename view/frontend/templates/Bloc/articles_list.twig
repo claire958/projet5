@@ -24,9 +24,11 @@
 {# PAGINATION #}
 <nav aria-label="...">
     <ul class="pagination justify-content-center">
-        {% for i in 1..nombreDePagesPosts %}
-            <li class="page-item"><a class="page-link" href="index.php?page=blog&amp;idPage={{ i }}">{{ i }}</a></li>
-        {% endfor %}
+        {% if nombreDePagesPosts >= 1 %}
+            {% for i in 1..nombreDePagesPosts %}
+                <li class="page-item"><a class="page-link" href="index.php?page=blog&amp;idPage={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+        {% endif %}
     </ul>
 </nav>
 
